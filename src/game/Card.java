@@ -1,3 +1,4 @@
+package game;
 public class Card {
 
     private Color color;
@@ -44,8 +45,5 @@ public class Card {
         return this.color + " "  + lastPart ;
     }
     
-    public void changeColor(Color color) {
-
-    }
 }
   

@@ -1,4 +1,5 @@
-public class Wildcard extends Card {
+package game;
+public class Wildcard extends Card implements ChangeColor{
     
 
     public Wildcard(Sign sign) {

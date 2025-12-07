@@ -1,3 +1,4 @@
+package game;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -17,6 +18,11 @@ public class Game {
             Player player = new Player("Player " + i);
             players.add(player);   
         }
+     }
+
+     public static void main(String[] args) {
+        Game game = new Game();
+        game.start();
      }
 
      private boolean checkGameOver() {
@@ -134,7 +140,7 @@ public class Game {
             if (activePlayer.isPlaying(eligibleCards)) {
                 Card choosedCard = activePlayer.chooseCard(eligibleCards);
                 specialRules = choosedCard.getSign();
-                if (specialRules.name().contains("WILDCARD")) changeColor(choosedCard);
+                if (choosedCard instanceof ChangeColor) changeColor(choosedCard);
                 deck.putOnTable(choosedCard);} 
             else pullingCards(1);
         } else pullingCards(1);
@@ -144,7 +150,8 @@ public class Game {
 
     public void changeColor(Card choosedCard) {
         Color newColor = activePlayer.chooseWildcardColor();
-        choosedCard.changeColor(newColor);
+        ChangeColor card = (ChangeColor) choosedCard;
+        card.changeColor(newColor);
     }
     
 }

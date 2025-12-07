@@ -1,3 +1,4 @@
+package game;
 public enum Sign {
     PLUS_TWO,
     REVERSE,
