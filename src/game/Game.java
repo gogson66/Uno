@@ -4,14 +4,14 @@ import java.util.stream.Collectors;
 
 public class Game {
 
-     private final int NUMBER_OF_PLAYERS = 4;
+     private final int NUMBER_OF_PLAYERS = 2;
      private final int NUMBER_OF_STARTING_CARDS = 6;
-     Deck deck = new Deck();
-     Player activePlayer;
-     List <Player> players = new ArrayList<>();
-     boolean isGameOver = false;
-     boolean isSecondMove = false;
-     Sign specialRules = Sign.NUMBER;
+     private Deck deck = new Deck();
+     private Player activePlayer;
+     private List <Player> players = new ArrayList<>();
+     private boolean isGameOver = false;
+     private boolean isSecondMove = false;
+     private Sign specialRules = Sign.NUMBER;
 
      public Game() {
         for (int i = 0; i < NUMBER_OF_PLAYERS; i++) {
@@ -32,6 +32,10 @@ public class Game {
         } 
         else return false;
      } 
+
+     public List<Player> getPlayers() {
+        return players;
+     }
 
 
 
@@ -92,7 +96,7 @@ public class Game {
     }
     
 
-    public void start() {
+    /*public void start() {
         deal();
         while(!isGameOver) {
             for (int i = 0; i < players.size(); i++ ) {
@@ -108,7 +112,11 @@ public class Game {
         }
         }
         
-    }  
+    }  */
+
+        public void start() {
+
+        }
 
     private void pullingCards(int num) {
         if (isSecondMove) return;
@@ -126,7 +134,7 @@ public class Game {
     public void deal() {
         deck.shuffle();
         for(Player player: players) {  
-            List<Card> startingCards = deck.getCards(NUMBER_OF_STARTING_CARDS);
+            List<Card> startingCards =  deck.getCards(NUMBER_OF_STARTING_CARDS);
             player.setOwnCards(startingCards);
             System.out.println("Starting cards: " + player.getOwnCards());
         }
@@ -137,6 +145,7 @@ public class Game {
         if (checkSkippableSpecialRules(position)) return;
         List<Card> eligibleCards = eligibleMoves(deck.getFirstDiscardedCard());
         if (!eligibleCards.isEmpty()) {
+            /*if (activePlayer.isPlaying(eligibleCards)) {*/
             if (activePlayer.isPlaying(eligibleCards)) {
                 Card choosedCard = activePlayer.chooseCard(eligibleCards);
                 specialRules = choosedCard.getSign();
