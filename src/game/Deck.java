@@ -12,15 +12,15 @@ public class Deck {
     public Deck() {
         for (Color color: colors) {
             for (int i = 0; i < NUMBER_OF_COLORED_CARDS; i++ ) {
-                Card card = new Card(color, i/2);
+                Card card = new Card(color, i/2, "/resources/cards/" + color.name().toLowerCase() + "_" + i/2 + ".jpg");
                 talonCards.add(card);
         }
       } 
 
       for (int i = 0; i < NUMBER_OF_SPECIAL_CARDS; i++) {
-        Card wildCard = new Wildcard(Sign.WILDCARD);
+        Card wildCard = new Wildcard(Sign.WILDCARD, "/resources/cards/Wild.jpg");
         talonCards.add(wildCard);
-        Card wildCardPlus = new Wildcard(Sign.WILDCARD_PLUS);
+        Card wildCardPlus = new Wildcard(Sign.WILDCARD_PLUS, "/resources/cards/Wild_Draw_4.jpg");
         talonCards.add(wildCardPlus);
 
       }
@@ -59,7 +59,7 @@ public class Deck {
     }
 
     public Card getFirstDiscardedCard() {
-        return (discardedCards.size() == 0) ? new EmptyCard(Color.NO_COLOR, -1): discardedCards.getLast();
+        return (discardedCards.size() == 0) ? new EmptyCard(Color.NO_COLOR, -1, "empty"): discardedCards.getLast();
     }
 
     public List<Card> getDiscardeCards() {

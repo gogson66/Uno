@@ -15,9 +15,10 @@ import javax.swing.SwingUtilities;
 public class GameWindow extends JFrame{
 
         private JButton dealButton;
-        private JPanel playerOnePanel;
-        private JPanel playerTwoPanel;
         private JPanel discardedCardsPanel;
+        private CardButton discardedCard;
+        private List<PlayerPanel> playerPanels = new ArrayList<>();
+        private String[] positions = new String[] {BorderLayout.SOUTH, BorderLayout.NORTH, BorderLayout.WEST, BorderLayout.EAST};
         Game game;
 
         public GameWindow() {
@@ -43,18 +44,10 @@ public class GameWindow extends JFrame{
         private void initComponents() {
 
             dealButton = new JButton("Draw");
-            playerOnePanel = new JPanel();
-            playerTwoPanel = new JPanel();
+
             discardedCardsPanel = new JPanel();
-
-            playerOnePanel.setBackground(Color.GREEN);
-            playerTwoPanel.setBackground(Color.GREEN);
             discardedCardsPanel.setBackground(Color.GREEN);
-
-            add(playerTwoPanel, BorderLayout.NORTH);
             add(discardedCardsPanel, BorderLayout.CENTER);
-            add(playerOnePanel, BorderLayout.SOUTH);
-
             discardedCardsPanel.add(dealButton);
 
             dealButton.addActionListener(e -> dealCards());
@@ -63,23 +56,55 @@ public class GameWindow extends JFrame{
 
         private void dealCards() {
 
-            ArrayList<CardButton> playerOneCards = new ArrayList<>();
-
             game.deal();
+            dealButton.setVisible(false);
 
-            List<Player> players = game.getPlayers();
-            List<Card> cards = players.get(0).getOwnCards();
+            discardedCard = new CardButton(game.getFrontCard());
+            discardedCard.setEnabled(false);
+            discardedCardsPanel.add(discardedCard);
 
-            for (Card card : cards) {
-                playerOneCards.add(new CardButton(card));
+            for(int i = 0; i < game.getPlayers().size(); i++) {
+                Player player = game.getPlayers().get(i);
+                PlayerPanel playerPanel = new PlayerPanel(player);
+                add(playerPanel, positions[i]);
+                playerPanels.add(playerPanel);
+                for (Card card: player.getOwnCards()) {
+                    CardButton cardButton = new CardButton(card);
+                    cardButton.addActionListener(e -> playCard(player, card));
+                    playerPanel.add(cardButton);
+                }
+                playerPanel.revalidate();
+                playerPanel.repaint();
             }
 
-            for (CardButton cardButton : playerOneCards) {
-                playerOnePanel.add(cardButton);
+            play(game.getActivePlayer());
+
+        }
+
+        private void playCard(Player player, Card card) {
+
+            game.play(player, card);
+            play(game.getActivePlayer());
+
+        }
+
+        private void play(Player currentPlayer) {
+            List<Card> eligibleCards = game.getEligibleMoves(game.getFrontCard());
+            for (PlayerPanel panel: playerPanels) {
+                if (panel.getPlayer().equals(currentPlayer)) {
+                    for (Component c: panel.getComponents()) {
+                        if (c instanceof CardButton) {
+                            CardButton cardButton = (CardButton) c;
+                            if (!eligibleCards.contains(cardButton.getCard())) cardButton.setEnabled(false);
+                        }
+                    }
+                } else {
+                    for (Component c: panel.getComponents()) {
+                        if (c instanceof CardButton) c.setEnabled(false);
+                    }
+                }
             }
 
-            playerOnePanel.revalidate();
-            playerOnePanel.repaint();
         }
     
 }

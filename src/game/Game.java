@@ -8,6 +8,7 @@ public class Game {
      private final int NUMBER_OF_STARTING_CARDS = 6;
      private Deck deck = new Deck();
      private Player activePlayer;
+     private Card frontCard;
      private List <Player> players = new ArrayList<>();
      private boolean isGameOver = false;
      private boolean isSecondMove = false;
@@ -37,9 +38,12 @@ public class Game {
         return players;
      }
 
+     public Player getActivePlayer() {
+        return activePlayer;
+     }
 
 
-    private List<Card> eligibleMoves(Card firstDiscardedCard) {
+    public List<Card> getEligibleMoves(Card firstDiscardedCard) {
         if (firstDiscardedCard instanceof EmptyCard) return new ArrayList<>(activePlayer.getOwnCards());
         List<Card> eligibleCards = activePlayer.getOwnCards().stream()
         .filter(card -> (card.getColor().equals(firstDiscardedCard.getColor())) || (card.getNumber() == firstDiscardedCard.getNumber()) || card.getSign().name().contains("WILDCARD"))
@@ -77,7 +81,7 @@ public class Game {
         specialRules = Sign.NUMBER;
     }
 
-    private boolean checkSkippableSpecialRules(int position) {
+    private boolean checkSkippableSpecialRules() {
         if (specialRules.equals(Sign.PLUS_TWO)) {
             pullingCards(2);
             resetSpecialRules();
@@ -114,6 +118,12 @@ public class Game {
         
     }  */
 
+        public Card getFrontCard() {
+            frontCard = deck.getFirstDiscardedCard();
+            return frontCard;
+        }
+
+
         public void start() {
 
         }
@@ -138,14 +148,16 @@ public class Game {
             player.setOwnCards(startingCards);
             System.out.println("Starting cards: " + player.getOwnCards());
         }
+
+        activePlayer = players.get(0);
  
     }
 
-    public void play(int position) {
-        if (checkSkippableSpecialRules(position)) return;
-        List<Card> eligibleCards = eligibleMoves(deck.getFirstDiscardedCard());
+    public void play(Player player, Card card) {
+        activePlayer = player;
+        if (checkSkippableSpecialRules()) return;
+        List<Card> eligibleCards = getEligibleMoves(deck.getFirstDiscardedCard());
         if (!eligibleCards.isEmpty()) {
-            /*if (activePlayer.isPlaying(eligibleCards)) {*/
             if (activePlayer.isPlaying(eligibleCards)) {
                 Card choosedCard = activePlayer.chooseCard(eligibleCards);
                 specialRules = choosedCard.getSign();
