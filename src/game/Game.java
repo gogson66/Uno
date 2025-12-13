@@ -46,7 +46,7 @@ public class Game {
     public List<Card> getEligibleMoves(Card firstDiscardedCard) {
         if (firstDiscardedCard instanceof EmptyCard) return new ArrayList<>(activePlayer.getOwnCards());
         List<Card> eligibleCards = activePlayer.getOwnCards().stream()
-        .filter(card -> (card.getColor().equals(firstDiscardedCard.getColor())) || (card.getNumber() == firstDiscardedCard.getNumber()) || card.getSign().name().contains("WILDCARD"))
+        .filter(card -> (card.getColor().equals(firstDiscardedCard.getColor())) || (card.getNumber() == firstDiscardedCard.getNumber() && card.getSign().equals(firstDiscardedCard.getSign())) || card.getSign().name().contains("WILDCARD"))
         .collect(Collectors.toList());
 
         System.out.println("Eligible cards: " + eligibleCards);
