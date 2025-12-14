@@ -7,6 +7,7 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -15,7 +16,8 @@ import javax.swing.SwingUtilities;
 public class GameWindow extends JFrame{
 
         private JButton dealButton;
-        private JPanel discardedCardsPanel;
+        private JPanel centerPanel;
+        private JButton tallon;
         private CardButton discardedCard;
         private List<PlayerPanel> playerPanels = new ArrayList<>();
         private String[] positions = new String[] {BorderLayout.SOUTH, BorderLayout.NORTH, BorderLayout.WEST, BorderLayout.EAST};
@@ -45,10 +47,11 @@ public class GameWindow extends JFrame{
 
             dealButton = new JButton("Draw");
 
-            discardedCardsPanel = new JPanel();
-            discardedCardsPanel.setBackground(Color.GREEN);
-            add(discardedCardsPanel, BorderLayout.CENTER);
-            discardedCardsPanel.add(dealButton);
+            centerPanel = new JPanel(new BorderLayout());
+            centerPanel.setBackground(Color.GREEN);
+            add(centerPanel, BorderLayout.CENTER);
+
+            centerPanel.add(dealButton);
 
             dealButton.addActionListener(e -> dealCards());
 
@@ -60,24 +63,30 @@ public class GameWindow extends JFrame{
             dealButton.setVisible(false);
 
             discardedCard = new CardButton(game.getFrontCard());
+            JPanel discardedCardPanel = new JPanel(new GridBagLayout());
+            discardedCardPanel.setBackground(Color.GREEN);
+            discardedCardPanel.add(discardedCard);
+
+            tallon = new JButton();
+            ImageIcon icon = new ImageIcon(getClass().getResource("/cards/back.png"));
+            Image img = icon.getImage();
+            Image scaledImg = img.getScaledInstance(60, 90, Image.SCALE_SMOOTH);
+            icon = new ImageIcon(scaledImg);
+            tallon.setIcon(icon);
+
+            tallon.addActionListener(e -> pullCard());
+
+        
+            JPanel tallonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+            tallonPanel.setBackground(Color.GREEN);
+            tallonPanel.add(tallon);
+
+
             discardedCard.setEnabled(false);
-            discardedCardsPanel.add(discardedCard);
+            centerPanel.add(discardedCardPanel, BorderLayout.CENTER);
+            centerPanel.add(tallonPanel, BorderLayout.EAST);
 
-            for(int i = 0; i < game.getPlayers().size(); i++) {
-                Player player = game.getPlayers().get(i);
-                PlayerPanel playerPanel = new PlayerPanel(player);
-                add(playerPanel, positions[i]);
-                playerPanels.add(playerPanel);
-                for (Card card: player.getOwnCards()) {
-                    CardButton cardButton = new CardButton(card);
-                    cardButton.addActionListener(e -> playCard(player, card));
-                    playerPanel.add(cardButton);
-                }
-                playerPanel.revalidate();
-                playerPanel.repaint();
-            }
-
-            play(game.getActivePlayer());
+            readState();
 
         }
 
@@ -85,6 +94,12 @@ public class GameWindow extends JFrame{
 
             game.play(player, card);
             play(game.getActivePlayer());
+
+        }
+
+        private void pullCard() {
+            game.pullingCards(1);
+            readState();
 
         }
 
@@ -104,6 +119,29 @@ public class GameWindow extends JFrame{
                     }
                 }
             }
+
+        }
+
+        private void readState() {
+
+            for (PlayerPanel panel: playerPanels) panel.removeAll();
+
+            for(int i = 0; i < game.getPlayers().size(); i++) {
+                Player player = game.getPlayers().get(i);
+                PlayerPanel playerPanel = new PlayerPanel(player);
+                add(playerPanel, positions[i]);
+                playerPanels.add(playerPanel);
+                for (Card card: player.getOwnCards()) {
+                    CardButton cardButton = new CardButton(card);
+                    cardButton.addActionListener(e -> playCard(player, card));
+                    playerPanel.add(cardButton);
+                }
+                playerPanel.revalidate();
+                playerPanel.repaint();
+            }
+
+            play(game.getActivePlayer());
+
 
         }
     

@@ -128,8 +128,8 @@ public class Game {
 
         }
 
-    private void pullingCards(int num) {
-        if (isSecondMove) return;
+    public void pullingCards(int num) {
+        //if (isSecondMove) return;
         int i = 0;
         while (i < num) {
             Card pulledCard = deck.getCard();
@@ -137,7 +137,7 @@ public class Game {
             System.out.println("You pulled " + pulledCard + " You now have " + activePlayer.getOwnCards());
             i++;
         }
-        if (num == 1) isSecondMove = true;
+        //if (num == 1) isSecondMove = true;
          
     }
 
