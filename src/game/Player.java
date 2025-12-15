@@ -43,13 +43,8 @@ public class Player {
          
     }
 
-    public Card chooseCard(List<Card> eligibleCards) {
-        if (eligibleCards.size() == 1) return eligibleCards.get(0);
-        System.out.println("You chose to play! Pick a card!");
-        Scanner in = scanner();
-        int cardIndex = in.nextInt();
-        Card choosedCard = eligibleCards.get(cardIndex);
-        return ownCards.remove(ownCards.indexOf(choosedCard));
+    public Card shedCard(Card card) {
+        return ownCards.remove(ownCards.indexOf(card));
     }
 
     public Color chooseWildcardColor() {

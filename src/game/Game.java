@@ -8,6 +8,7 @@ public class Game {
      private final int NUMBER_OF_STARTING_CARDS = 6;
      private Deck deck = new Deck();
      private Player activePlayer;
+     private int activePlayerIndex = 0;
      private Card frontCard;
      private List <Player> players = new ArrayList<>();
      private boolean isGameOver = false;
@@ -43,7 +44,7 @@ public class Game {
      }
 
 
-    public List<Card> getEligibleMoves(Card firstDiscardedCard) {
+    public List<Card> getEligibleCards(Card firstDiscardedCard) {
         if (firstDiscardedCard instanceof EmptyCard) return new ArrayList<>(activePlayer.getOwnCards());
         List<Card> eligibleCards = activePlayer.getOwnCards().stream()
         .filter(card -> (card.getColor().equals(firstDiscardedCard.getColor())) || (card.getNumber() == firstDiscardedCard.getNumber() && card.getSign().equals(firstDiscardedCard.getSign())) || card.getSign().name().contains("WILDCARD"))
@@ -129,7 +130,10 @@ public class Game {
         }
 
     public void pullingCards(int num) {
-        //if (isSecondMove) return;
+        if (isSecondMove) {
+            activePlayer = nextPlayer();
+            return;
+        }
         int i = 0;
         while (i < num) {
             Card pulledCard = deck.getCard();
@@ -137,8 +141,12 @@ public class Game {
             System.out.println("You pulled " + pulledCard + " You now have " + activePlayer.getOwnCards());
             i++;
         }
-        //if (num == 1) isSecondMove = true;
+        if (num == 1) isSecondMove = true;
          
+    }
+
+    public boolean isSecondMove() {
+        return isSecondMove;
     }
 
     public void deal() {
@@ -149,24 +157,33 @@ public class Game {
             System.out.println("Starting cards: " + player.getOwnCards());
         }
 
-        activePlayer = players.get(0);
+        activePlayer = players.get(activePlayerIndex);
  
     }
 
     public void play(Player player, Card card) {
-        activePlayer = player;
         if (checkSkippableSpecialRules()) return;
-        List<Card> eligibleCards = getEligibleMoves(deck.getFirstDiscardedCard());
-        if (!eligibleCards.isEmpty()) {
+        //List<Card> eligibleCards = getEligibleCards(deck.getFirstDiscardedCard());
+        /*if (!eligibleCards.isEmpty()) {
             if (activePlayer.isPlaying(eligibleCards)) {
                 Card choosedCard = activePlayer.chooseCard(eligibleCards);
                 specialRules = choosedCard.getSign();
                 if (choosedCard instanceof ChangeColor) changeColor(choosedCard);
                 deck.putOnTable(choosedCard);} 
             else pullingCards(1);
-        } else pullingCards(1);
+        } else pullingCards(1);*/
+
+        activePlayer.shedCard(card);
+        deck.putOnTable(card);
+        activePlayer = nextPlayer();
  
-        eligibleCards.clear();
+        //eligibleCards.clear();
+    }
+
+    private Player nextPlayer() {
+        activePlayerIndex++;
+        isSecondMove = false;
+        return players.get(activePlayerIndex % players.size());
     }
 
     public void changeColor(Card choosedCard) {

@@ -17,6 +17,7 @@ public class GameWindow extends JFrame{
 
         private JButton dealButton;
         private JPanel centerPanel;
+        private JPanel discardedCardPanel;
         private JButton tallon;
         private CardButton discardedCard;
         private List<PlayerPanel> playerPanels = new ArrayList<>();
@@ -63,7 +64,7 @@ public class GameWindow extends JFrame{
             dealButton.setVisible(false);
 
             discardedCard = new CardButton(game.getFrontCard());
-            JPanel discardedCardPanel = new JPanel(new GridBagLayout());
+            discardedCardPanel = new JPanel(new GridBagLayout());
             discardedCardPanel.setBackground(Color.GREEN);
             discardedCardPanel.add(discardedCard);
 
@@ -93,18 +94,17 @@ public class GameWindow extends JFrame{
         private void playCard(Player player, Card card) {
 
             game.play(player, card);
-            play(game.getActivePlayer());
+            readState();
 
         }
 
         private void pullCard() {
             game.pullingCards(1);
             readState();
-
         }
 
-        private void play(Player currentPlayer) {
-            List<Card> eligibleCards = game.getEligibleMoves(game.getFrontCard());
+        private void markEligibleCards(Player currentPlayer) {
+            List<Card> eligibleCards = game.getEligibleCards(game.getFrontCard());
             for (PlayerPanel panel: playerPanels) {
                 if (panel.getPlayer().equals(currentPlayer)) {
                     for (Component c: panel.getComponents()) {
@@ -140,7 +140,13 @@ public class GameWindow extends JFrame{
                 playerPanel.repaint();
             }
 
-            play(game.getActivePlayer());
+            if (game.isSecondMove()) tallon.setText("Skip play");
+            else tallon.setText("");
+
+            discardedCardPanel.removeAll();
+            discardedCard = new CardButton(game.getFrontCard());
+            discardedCardPanel.add(discardedCard);
+            markEligibleCards(game.getActivePlayer());
 
 
         }
