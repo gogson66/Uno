@@ -27,6 +27,7 @@ public class Deck {
         talonCards.add(new Wildcard(Sign.WILDCARD_PLUS));
 
       }
+
     }
 
     public List<Card> getCards(int number) {
@@ -67,6 +68,10 @@ public class Deck {
 
     public List<Card> getDiscardeCards() {
         return discardedCards;
+    }
+
+    public String toString() {
+        return talonCards.toString();
     }
     
 }

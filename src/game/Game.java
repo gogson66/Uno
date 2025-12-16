@@ -18,7 +18,8 @@ public class Game {
      public Game() {
         for (int i = 0; i < NUMBER_OF_PLAYERS; i++) {
             Player player = new Player("Player " + i);
-            players.add(player);   
+            players.add(player); 
+            System.out.println(deck);  
         }
      }
 
@@ -83,6 +84,7 @@ public class Game {
     }
 
     private boolean checkSkippableSpecialRules() {
+        
         if (specialRules.equals(Sign.PLUS_TWO)) {
             pullingCards(2);
             resetSpecialRules();
@@ -96,9 +98,8 @@ public class Game {
             pullingCards(4);
             resetSpecialRules();
             return true;
-        }
-        else return false;
-    }
+        } else return false;
+    } 
     
 
     /*public void start() {
@@ -162,8 +163,14 @@ public class Game {
     }
 
     public void play(Player player, Card card) {
-        if (checkSkippableSpecialRules()) return;
-        //List<Card> eligibleCards = getEligibleCards(deck.getFirstDiscardedCard());
+        System.out.println(specialRules);
+        List<Card> eligibleCards = getEligibleCards(deck.getFirstDiscardedCard());
+        if (eligibleCards.contains(card)) {
+            activePlayer.shedCard(card);
+            deck.putOnTable(card);
+            specialRules = card.getSign();
+            activePlayer = nextPlayer();
+        }
         /*if (!eligibleCards.isEmpty()) {
             if (activePlayer.isPlaying(eligibleCards)) {
                 Card choosedCard = activePlayer.chooseCard(eligibleCards);
@@ -173,9 +180,6 @@ public class Game {
             else pullingCards(1);
         } else pullingCards(1);*/
 
-        activePlayer.shedCard(card);
-        deck.putOnTable(card);
-        activePlayer = nextPlayer();
  
         //eligibleCards.clear();
     }

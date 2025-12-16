@@ -18,6 +18,7 @@ public class GameWindow extends JFrame{
         private JButton dealButton;
         private JPanel centerPanel;
         private JPanel discardedCardPanel;
+        private ImageIcon icon;
         private JButton tallon;
         private CardButton discardedCard;
         private List<PlayerPanel> playerPanels = new ArrayList<>();
@@ -69,7 +70,7 @@ public class GameWindow extends JFrame{
             discardedCardPanel.add(discardedCard);
 
             tallon = new JButton();
-            ImageIcon icon = new ImageIcon(getClass().getResource("/cards/back.png"));
+            icon = new ImageIcon(getClass().getResource("/cards/back.png"));
             Image img = icon.getImage();
             Image scaledImg = img.getScaledInstance(60, 90, Image.SCALE_SMOOTH);
             icon = new ImageIcon(scaledImg);
@@ -140,9 +141,8 @@ public class GameWindow extends JFrame{
                 playerPanel.repaint();
             }
 
-            if (game.isSecondMove()) tallon.setText("Skip play");
-            else tallon.setText("");
-
+            checkSecondMove();
+            
             discardedCardPanel.removeAll();
             discardedCard = new CardButton(game.getFrontCard());
             discardedCardPanel.add(discardedCard);
@@ -151,4 +151,13 @@ public class GameWindow extends JFrame{
 
         }
     
+        private void checkSecondMove() {
+            if (game.isSecondMove()) {
+                tallon.setText("Skip play");
+                tallon.setIcon(null);
+            } else {
+                tallon.setText("");
+                tallon.setIcon(icon);
+            }
+        }
 }
