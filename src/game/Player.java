@@ -47,10 +47,8 @@ public class Player {
         return ownCards.remove(ownCards.indexOf(card));
     }
 
-    public Color chooseWildcardColor() {
-        System.out.println("Chose color:");
-        Scanner in = scanner();
-        return Color.valueOf(in.nextLine().toUpperCase()) ;
+    public Color chooseWildcardColor(Color color) {
+        return color;
 
     }
 
