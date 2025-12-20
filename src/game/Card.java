@@ -1,19 +1,19 @@
 package game;
 public class Card {
 
-    private Color color;
+    private CardColor color;
     private int number;
     private Sign sign;
     private String imagePath;
 
-    public Card(Color color, int number) {
+    public Card(CardColor color, int number) {
         this.color = color;
         this.number = number;
         this.sign = Sign.NUMBER;
         this.imagePath = "/cards/" + color.name().toLowerCase() + "_" + number + ".jpg";
     }
 
-    public Card(Color color, Sign sign) {
+    public Card(CardColor color, Sign sign) {
         this.color = color;
         this.sign = sign;
         this.imagePath = "/cards/" + color.name().toLowerCase() + "_" + sign.name().toLowerCase() + ".jpg";
@@ -21,12 +21,12 @@ public class Card {
     }
 
     public Card(Sign sign) {
-        this.color = Color.CHANGE;
+        this.color = CardColor.CHANGE;
         this.sign = sign;
         this.imagePath = "/cards/" + this.sign.name().toLowerCase() + ".jpg";
     }
 
-    public Color getColor() {
+    public CardColor getColor() {
         return this.color;
     }
 
@@ -38,7 +38,7 @@ public class Card {
         this.sign = sign;
     }
 
-    public void setColor(Color color) {
+    public void setColor(CardColor color) {
         this.color = color;
     }
 

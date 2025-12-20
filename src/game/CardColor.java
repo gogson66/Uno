@@ -1,5 +1,5 @@
 package game;
- public enum Color {
+ public enum CardColor {
     RED,
     BLUE, 
     GREEN, 

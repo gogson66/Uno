@@ -6,7 +6,7 @@ public class Wildcard extends Card implements ChangeColor{
         super(sign);
     }
 
-    public void changeColor(Color color) {
+    public void changeColor(CardColor color) {
         setColor(color);
     }
 }

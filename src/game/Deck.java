@@ -6,11 +6,11 @@ public class Deck {
     private List<Card> talonCards = new ArrayList<>();
     private List<Card> discardedCards= new ArrayList<>();
     private int NUMBER_OF_SPECIAL_CARDS = 4;
-    private Color[] colors = {Color.BLUE, Color.GREEN, Color.RED, Color.YELLOW};
+    private CardColor[] colors = {CardColor.BLUE, CardColor.GREEN, CardColor.RED, CardColor.YELLOW};
 
     public Deck() {
 
-        for (Color color: colors) {
+        for (CardColor color: colors) {
             talonCards.add(new Card(color, 0));
             for (int i = 1; i <= 9; i++ ) {
                 talonCards.add(new Card(color, i));
@@ -63,7 +63,7 @@ public class Deck {
     }
 
     public Card getFirstDiscardedCard() {
-        return (discardedCards.size() == 0) ? new EmptyCard(Color.NO_COLOR, -1): discardedCards.getLast();
+        return (discardedCards.size() == 0) ? new EmptyCard(CardColor.NO_COLOR, -1): discardedCards.getLast();
     }
 
     public List<Card> getDiscardeCards() {

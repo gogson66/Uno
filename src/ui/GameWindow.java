@@ -1,7 +1,9 @@
 package ui;
+
 import game.Card;
 import game.Game;
 import game.Player;
+import game.CardColor;
 
 import java.awt.*;
 import java.util.*;
@@ -94,8 +96,13 @@ public class GameWindow extends JFrame{
 
         private void playCard(Player player, Card card) {
 
+            if (card.getColor() == Color.CHANGE)
             game.play(player, card);
             readState();
+
+        }
+
+        private void changeColor() {
 
         }
 

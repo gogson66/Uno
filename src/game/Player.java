@@ -47,7 +47,7 @@ public class Player {
         return ownCards.remove(ownCards.indexOf(card));
     }
 
-    public Color chooseWildcardColor(Color color) {
+    public CardColor chooseWildcardColor(CardColor color) {
         return color;
 
     }

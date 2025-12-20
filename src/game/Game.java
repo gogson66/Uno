@@ -14,12 +14,13 @@ public class Game {
      private boolean isGameOver = false;
      private boolean isSecondMove = false;
      private Sign specialRules = Sign.NUMBER;
+     private int direction = 1;
+
 
      public Game() {
         for (int i = 0; i < NUMBER_OF_PLAYERS; i++) {
             Player player = new Player("Player " + i);
             players.add(player); 
-            System.out.println(deck);  
         }
      }
 
@@ -127,12 +128,13 @@ public class Game {
 
 
         public void start() {
+            
 
         }
 
     public void pullingCards(int num) {
         if (isSecondMove) {
-            activePlayer = nextPlayer();
+            nextPlayer();
             return;
         }
         int i = 0;
@@ -162,14 +164,14 @@ public class Game {
  
     }
 
+
     public void play(Player player, Card card) {
-        System.out.println(specialRules);
         List<Card> eligibleCards = getEligibleCards(deck.getFirstDiscardedCard());
         if (eligibleCards.contains(card)) {
             activePlayer.shedCard(card);
             deck.putOnTable(card);
             specialRules = card.getSign();
-            activePlayer = nextPlayer();
+            nextPlayer();
         }
         /*if (!eligibleCards.isEmpty()) {
             if (activePlayer.isPlaying(eligibleCards)) {
@@ -184,16 +186,17 @@ public class Game {
         //eligibleCards.clear();
     }
 
-    private Player nextPlayer() {
+    private void nextPlayer() {
         activePlayerIndex++;
         isSecondMove = false;
-        return players.get(activePlayerIndex % players.size());
+        activePlayer = players.get(activePlayerIndex % players.size());
+        if (checkSkippableSpecialRules()) nextPlayer();
     }
 
     public void changeColor(Card choosedCard) {
-        Color newColor = activePlayer.chooseWildcardColor();
+        /*Color newColor = activePlayer.chooseWildcardColor();
         ChangeColor card = (ChangeColor) choosedCard;
-        card.changeColor(newColor);
+        card.changeColor(newColor);*/
     }
     
 }
