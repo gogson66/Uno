@@ -25,6 +25,7 @@ public class GameWindow extends JFrame{
         private CardButton discardedCard;
         private List<PlayerPanel> playerPanels = new ArrayList<>();
         private String[] positions = new String[] {BorderLayout.SOUTH, BorderLayout.NORTH, BorderLayout.WEST, BorderLayout.EAST};
+        private boolean isChange = false;
         Game game;
 
         public GameWindow() {
@@ -96,20 +97,36 @@ public class GameWindow extends JFrame{
 
         private void playCard(Player player, Card card) {
 
-            if (card.getColor() == Color.CHANGE)
             game.play(player, card);
+            if (card.getColor() == CardColor.CHANGE) {
+                getChangeColorPanel();
+                isChange = true;
+            }
             readState();
 
         }
 
-        private void changeColor() {
+        private void getChangeColorPanel() {
+            JPanel colorPanel = new JPanel();
+            for (CardColor color: CardColor.values()) {
+                JButton colorButton = new JButton(color.name());
+                colorButton.addActionListener(e -> chooseColor(color));
+                colorPanel.add(colorButton);
+            }
+            centerPanel.add(colorPanel);
+        }
 
+        private void chooseColor(CardColor color){
+            game.changeColor(color);
+            isChange = false;
+            readState();
+            System.out.println(color);
         }
 
         private void pullCard() {
             game.pullingCards(1);
             readState();
-        }
+        } 
 
         private void markEligibleCards(Player currentPlayer) {
             List<Card> eligibleCards = game.getEligibleCards(game.getFrontCard());
@@ -128,6 +145,15 @@ public class GameWindow extends JFrame{
                 }
             }
 
+        }
+
+        private void disableAllCards() {
+            for (PlayerPanel panel: playerPanels) {
+                for(Component c: panel.getComponents()) {
+                    CardButton cardButton = (CardButton) c;
+                    cardButton.setEnabled(false);
+                }
+            }
         }
 
         private void readState() {
@@ -153,7 +179,8 @@ public class GameWindow extends JFrame{
             discardedCardPanel.removeAll();
             discardedCard = new CardButton(game.getFrontCard());
             discardedCardPanel.add(discardedCard);
-            markEligibleCards(game.getActivePlayer());
+            if (isChange) disableAllCards();
+            else markEligibleCards(game.getActivePlayer());
 
 
         }
