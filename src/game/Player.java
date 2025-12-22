@@ -35,24 +35,14 @@ public class Player {
         return name;
     }
 
-    public boolean isPlaying(List<Card> eligibleCards) {
-        System.out.println("You have following eligible cards " + eligibleCards);
-        System.out.println("Do you wanna play? (Y/N)");
-        Scanner in = scanner();
-        return in.nextLine().toUpperCase().equals("Y");
-         
-    }
 
     public Card shedCard(Card card) {
         return ownCards.remove(ownCards.indexOf(card));
     }
 
-    public CardColor chooseWildcardColor(CardColor color) {
-        return color;
-
+    public void chooseWildcardColor(CardColor color, Card card) {
+        ChangeColor changingCard = (ChangeColor) card;
+        changingCard.changeColor(color);
     }
 
-    private Scanner scanner() {
-        return new Scanner(System.in);
-    }
 }

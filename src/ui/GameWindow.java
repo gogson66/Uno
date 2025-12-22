@@ -20,6 +20,7 @@ public class GameWindow extends JFrame{
         private JButton dealButton;
         private JPanel centerPanel;
         private JPanel discardedCardPanel;
+        private JPanel chooseColorPanel;
         private ImageIcon icon;
         private JButton tallon;
         private CardButton discardedCard;
@@ -107,18 +108,24 @@ public class GameWindow extends JFrame{
         }
 
         private void getChangeColorPanel() {
-            JPanel colorPanel = new JPanel();
+            chooseColorPanel = new JPanel();
             for (CardColor color: CardColor.values()) {
                 JButton colorButton = new JButton(color.name());
                 colorButton.addActionListener(e -> chooseColor(color));
-                colorPanel.add(colorButton);
+                chooseColorPanel.add(colorButton);
+                chooseColorPanel.setBackground(Color.GREEN);
+
             }
-            centerPanel.add(colorPanel);
+            centerPanel.add(chooseColorPanel);
         }
 
         private void chooseColor(CardColor color){
             game.changeColor(color);
             isChange = false;
+            chooseColorPanel.removeAll();
+            centerPanel.revalidate();
+            centerPanel.repaint();
+            System.out.println(SwingUtilities.isEventDispatchThread());
             readState();
             System.out.println(color);
         }
@@ -179,9 +186,10 @@ public class GameWindow extends JFrame{
             discardedCardPanel.removeAll();
             discardedCard = new CardButton(game.getFrontCard());
             discardedCardPanel.add(discardedCard);
+            //centerPanel.revalidate();
+            //centerPanel.repaint();
             if (isChange) disableAllCards();
             else markEligibleCards(game.getActivePlayer());
-
 
         }
     
