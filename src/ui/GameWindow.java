@@ -13,6 +13,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
 public class GameWindow extends JFrame{
@@ -21,6 +22,7 @@ public class GameWindow extends JFrame{
         private JPanel centerPanel;
         private JPanel discardedCardPanel;
         private JPanel chooseColorPanel;
+        private JPanel endGamePanel;
         private ImageIcon icon;
         private JButton tallon;
         private CardButton discardedCard;
@@ -103,6 +105,7 @@ public class GameWindow extends JFrame{
                 getChangeColorPanel();
                 isChange = true;
             }
+            checkGameOver();
             readState();
 
         }
@@ -186,11 +189,34 @@ public class GameWindow extends JFrame{
             discardedCardPanel.removeAll();
             discardedCard = new CardButton(game.getFrontCard());
             discardedCardPanel.add(discardedCard);
-            //centerPanel.revalidate();
-            //centerPanel.repaint();
             if (isChange) disableAllCards();
             else markEligibleCards(game.getActivePlayer());
 
+        }
+
+        private void startNewGame(){
+            GameWindow newGameWindow = new GameWindow();
+            this.dispose();
+            //game = new Game();
+            //game.start();
+        }
+
+        private void checkGameOver() {
+            if (game.isGameOver()) {
+                endGamePanel = new JPanel();
+                JTextField endGameLabel = new JTextField(game.getActivePlayer() + " won!");
+                JButton newGameButton = new JButton("New game");
+                JButton exitGameButton = new JButton("Exit game");
+                newGameButton.addActionListener(e -> startNewGame());
+                exitGameButton.addActionListener(e -> System.exit(0));
+                endGamePanel.add(endGameLabel);
+                endGamePanel.add(newGameButton);
+                endGamePanel.add(exitGameButton);
+                centerPanel.add(endGamePanel);
+                disableAllCards();
+                centerPanel.revalidate();
+                centerPanel.repaint();
+            }
         }
     
         private void checkSecondMove() {

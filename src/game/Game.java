@@ -11,8 +11,8 @@ public class Game {
      private int activePlayerIndex = 0;
      private Card frontCard;
      private List <Player> players = new ArrayList<>();
-     private boolean isGameOver = false;
      private boolean isSecondMove = false;
+     private boolean isGameOver = false;
      private Sign specialRules = Sign.NUMBER;
      private int direction = 1;
 
@@ -40,6 +40,10 @@ public class Game {
         } 
         else return false;
      } 
+
+     public boolean isGameOver() {
+        return isGameOver;
+     }
 
      public List<Player> getPlayers() {
         return players;
@@ -132,6 +136,7 @@ public class Game {
             activePlayer.shedCard(card);
             deck.putOnTable(card);
             specialRules = card.getSign();
+            if(checkGameOver()) return;
             if (checkReverseDirection()) direction *= -1;
             nextPlayer();
         }

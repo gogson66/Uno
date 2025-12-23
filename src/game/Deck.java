@@ -12,10 +12,10 @@ public class Deck {
 
         for (CardColor color: colors) {
             talonCards.add(new Card(color, 0));
-            for (int i = 1; i <= 9; i++ ) {
+            /*for (int i = 1; i <= 9; i++ ) {
                 talonCards.add(new Card(color, i));
                 talonCards.add(new Card(color, i));
-        }
+        }*/
             for (int i = 0; i < 2; i++) {
                 talonCards.add(new Card(color, Sign.PLUS_TWO ));
                 talonCards.add(new Card(color, Sign.SKIP ));
