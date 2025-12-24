@@ -101,7 +101,7 @@ public class GameWindow extends JFrame{
         private void playCard(Player player, Card card) {
 
             game.play(player, card);
-            if (card.getColor() == CardColor.CHANGE) {
+            if (card.getSign().name().contains("WILDCARD")) {
                 getChangeColorPanel();
                 isChange = true;
             }
@@ -128,9 +128,8 @@ public class GameWindow extends JFrame{
             chooseColorPanel.removeAll();
             centerPanel.revalidate();
             centerPanel.repaint();
-            System.out.println(SwingUtilities.isEventDispatchThread());
+            tallon.setEnabled(true);
             readState();
-            System.out.println(color);
         }
 
         private void pullCard() {
@@ -164,6 +163,8 @@ public class GameWindow extends JFrame{
                     cardButton.setEnabled(false);
                 }
             }
+
+            tallon.setEnabled(false);
         }
 
         private void readState() {
@@ -184,8 +185,7 @@ public class GameWindow extends JFrame{
                 playerPanel.repaint();
             }
 
-            checkSecondMove();
-            
+            checkTallon();
             discardedCardPanel.removeAll();
             discardedCard = new CardButton(game.getFrontCard());
             discardedCardPanel.add(discardedCard);
@@ -194,24 +194,11 @@ public class GameWindow extends JFrame{
 
         }
 
-        private void startNewGame(){
-            GameWindow newGameWindow = new GameWindow();
-            this.dispose();
-            //game = new Game();
-            //game.start();
-        }
-
         private void checkGameOver() {
             if (game.isGameOver()) {
                 endGamePanel = new JPanel();
                 JTextField endGameLabel = new JTextField(game.getActivePlayer() + " won!");
-                JButton newGameButton = new JButton("New game");
-                JButton exitGameButton = new JButton("Exit game");
-                newGameButton.addActionListener(e -> startNewGame());
-                exitGameButton.addActionListener(e -> System.exit(0));
                 endGamePanel.add(endGameLabel);
-                endGamePanel.add(newGameButton);
-                endGamePanel.add(exitGameButton);
                 centerPanel.add(endGamePanel);
                 disableAllCards();
                 centerPanel.revalidate();
@@ -219,7 +206,7 @@ public class GameWindow extends JFrame{
             }
         }
     
-        private void checkSecondMove() {
+        private void checkTallon() {
             if (game.isSecondMove()) {
                 tallon.setText("Skip play");
                 tallon.setIcon(null);

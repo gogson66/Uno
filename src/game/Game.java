@@ -65,7 +65,6 @@ public class Game {
     
     private boolean checkReverseDirection() {
         if (specialRules.equals(Sign.REVERSE)) {
-            System.out.println(players);
             resetSpecialRules();
             nextPlayer();
             return true;
