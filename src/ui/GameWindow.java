@@ -98,13 +98,17 @@ public class GameWindow extends JFrame{
 
         }
 
-        private void playCard(Player player, Card card) {
+        private void playCard(Card card) {
 
-            game.play(player, card);
+            game.playCard(card);
             if (card.getSign().name().contains("WILDCARD")) {
                 getChangeColorPanel();
                 isChange = true;
             }
+            checkGameOver();
+            readState();
+
+            game.playComputer();
             checkGameOver();
             readState();
 
@@ -138,7 +142,7 @@ public class GameWindow extends JFrame{
         } 
 
         private void markEligibleCards(Player currentPlayer) {
-            List<Card> eligibleCards = game.getEligibleCards(game.getFrontCard());
+            List<Card> eligibleCards = currentPlayer.getEligibleCards();
             for (PlayerPanel panel: playerPanels) {
                 if (panel.getPlayer().equals(currentPlayer)) {
                     for (Component c: panel.getComponents()) {
@@ -178,7 +182,7 @@ public class GameWindow extends JFrame{
                 playerPanels.add(playerPanel);
                 for (Card card: player.getOwnCards()) {
                     CardButton cardButton = new CardButton(card);
-                    cardButton.addActionListener(e -> playCard(player, card));
+                    cardButton.addActionListener(e -> playCard(card));
                     playerPanel.add(cardButton);
                 }
                 playerPanel.revalidate();
@@ -207,7 +211,7 @@ public class GameWindow extends JFrame{
         }
     
         private void checkTallon() {
-            if (game.isSecondMove()) {
+            if (game.getActivePlayer().checkSecondTurn()) {
                 tallon.setText("Skip play");
                 tallon.setIcon(null);
             } else {

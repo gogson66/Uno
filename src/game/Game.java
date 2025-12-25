@@ -11,16 +11,19 @@ public class Game {
      private int activePlayerIndex = 0;
      private Card frontCard;
      private List <Player> players = new ArrayList<>();
-     private boolean isSecondMove = false;
      private boolean isGameOver = false;
      private Sign specialRules = Sign.NUMBER;
      private int direction = 1;
 
 
      public Game() {
-        for (int i = 0; i < NUMBER_OF_PLAYERS; i++) {
-            Player player = new Player("Player " + i);
+
+            Player player = new Player("You");
             players.add(player); 
+
+        for (int i = 0; i < NUMBER_OF_PLAYERS-1; i++) {
+            Player computerPlayer = new ComputerPlayer("Player " + i);
+            players.add(computerPlayer); 
         }
      }
 
@@ -52,15 +55,6 @@ public class Game {
      public Player getActivePlayer() {
         return activePlayer;
      }
-
-
-    public List<Card> getEligibleCards(Card firstDiscardedCard) {
-        if (firstDiscardedCard instanceof EmptyCard) return new ArrayList<>(activePlayer.getOwnCards());
-        List<Card> eligibleCards = activePlayer.getOwnCards().stream()
-        .filter(card -> (card.getColor().equals(firstDiscardedCard.getColor())) || (card.getNumber() == firstDiscardedCard.getNumber() && card.getSign().equals(firstDiscardedCard.getSign())) || card.getSign().name().contains("WILDCARD"))
-        .collect(Collectors.toList());
-        return eligibleCards;
-    }
 
     
     private boolean checkReverseDirection() {
@@ -99,7 +93,7 @@ public class Game {
         }
 
     public void pullingCards(int num) {
-        if (isSecondMove) {
+        if (activePlayer.checkSecondTurn()) {
             nextPlayer();
             return;
         }
@@ -109,19 +103,17 @@ public class Game {
             activePlayer.addToOwnCards(pulledCard);
             i++;
         }
-        if (num == 1) isSecondMove = true;
+        if (num == 1) activePlayer.setSecondTurn(true);
          
     }
 
-    public boolean isSecondMove() {
-        return isSecondMove;
-    }
 
     public void deal() {
         deck.shuffle();
         for(Player player: players) {  
             List<Card> startingCards =  deck.getCards(NUMBER_OF_STARTING_CARDS);
             player.setOwnCards(startingCards);
+            player.setEligibleCards(deck.getFirstDiscardedCard());
             System.out.println("Starting cards: " + player.getOwnCards());
         }
         activePlayer = players.get(activePlayerIndex);
@@ -129,9 +121,8 @@ public class Game {
     }
 
 
-    public void play(Player player, Card card) {
-        List<Card> eligibleCards = getEligibleCards(deck.getFirstDiscardedCard());
-        if (eligibleCards.contains(card)) {
+    public void playCard(Card card) {
+        if (activePlayer.getEligibleCards().contains(card)) {
             activePlayer.shedCard(card);
             deck.putOnTable(card);
             specialRules = card.getSign();
@@ -141,11 +132,29 @@ public class Game {
         }
     }
 
+    public void playComputer() {
+        if (activePlayer instanceof ComputerPlayer) {
+            activePlayer.setEligibleCards(frontCard);
+            ComputerPlayer computerPlayer = (ComputerPlayer) activePlayer;
+            GameMode mode = computerPlayer.decideMove();
+            switch (mode) {
+                case MOVE: {
+                    Card choosedCard = computerPlayer.chooseCard();
+                    playCard(choosedCard);
+                }
+                case PASS: nextPlayer();
+                case DRAW: pullingCards(1);;
+                                
+            }
+        }
+    }
+
     private void nextPlayer() {
-        isSecondMove = false;
+        activePlayer.setSecondTurn(false);
         activePlayerIndex = (activePlayerIndex + direction + players.size()) % players.size();
         activePlayer = players.get(activePlayerIndex);
         if (checkSkippableSpecialRules()) nextPlayer();
+        activePlayer.setEligibleCards(frontCard);
     
     }
 
