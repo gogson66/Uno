@@ -108,9 +108,16 @@ public class GameWindow extends JFrame{
             checkGameOver();
             readState();
 
-            game.playComputer();
+            try {
+                Thread.sleep(2000);
+            } catch(InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+           game.playComputer();
             checkGameOver();
-            readState();
+            readState(); 
+
+            System.out.println("PLAY CARD GUI");
 
         }
 

@@ -9,6 +9,7 @@ public class ComputerPlayer extends Player {
     }
 
     public GameMode decideMove() {
+        System.out.println("deciding move");
         if (getEligibleCards().size() == 0) {
             if (checkSecondTurn()) return GameMode.PASS;
             else return GameMode.DRAW;
@@ -22,7 +23,10 @@ public class ComputerPlayer extends Player {
         Card choosenCard = eligibleCards.stream()
         .filter(card -> card.getSign().equals(Sign.NUMBER))
         .findFirst()
-        .orElse(eligibleCards.stream().filter(card -> card.getSign().name().contains("WILDCARD")).findFirst().get());
+        .orElseGet(() -> eligibleCards.stream()
+        .filter(card -> card.getSign().name().contains("WILDCARD")).findFirst().orElseThrow(() -> new IllegalStateException("Card not found")));
+
+        System.out.println(choosenCard);
 
         return choosenCard;
 

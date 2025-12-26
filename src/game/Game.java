@@ -1,6 +1,5 @@
 package game;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Game {
 
@@ -125,6 +124,7 @@ public class Game {
         if (activePlayer.getEligibleCards().contains(card)) {
             activePlayer.shedCard(card);
             deck.putOnTable(card);
+            frontCard = card;
             specialRules = card.getSign();
             if(checkGameOver()) return;
             if (checkReverseDirection()) direction *= -1;
@@ -134,27 +134,36 @@ public class Game {
 
     public void playComputer() {
         if (activePlayer instanceof ComputerPlayer) {
-            activePlayer.setEligibleCards(frontCard);
+            //activePlayer.setEligibleCards(frontCard);
             ComputerPlayer computerPlayer = (ComputerPlayer) activePlayer;
             GameMode mode = computerPlayer.decideMove();
+            System.out.println(mode);
+            
             switch (mode) {
-                case MOVE: {
+                case MOVE -> {
                     Card choosedCard = computerPlayer.chooseCard();
                     playCard(choosedCard);
                 }
-                case PASS: nextPlayer();
-                case DRAW: pullingCards(1);;
+                case DRAW -> {
+                    pullingCards(1);
+                    playComputer();
+                }
+                case PASS -> nextPlayer();
                                 
             }
         }
     }
 
+
     private void nextPlayer() {
+        //new Exception("Called from; ").printStackTrace();
         activePlayer.setSecondTurn(false);
         activePlayerIndex = (activePlayerIndex + direction + players.size()) % players.size();
         activePlayer = players.get(activePlayerIndex);
         if (checkSkippableSpecialRules()) nextPlayer();
         activePlayer.setEligibleCards(frontCard);
+        System.out.println("ACTIVE PLAYER: " + activePlayer);
+        System.out.println(activePlayer.getEligibleCards());
     
     }
 
