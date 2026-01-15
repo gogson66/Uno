@@ -63,7 +63,7 @@ public class Deck {
     }
 
     public Card getFirstDiscardedCard() {
-        return (discardedCards.size() == 0) ? new EmptyCard(CardColor.NO_COLOR, -1): discardedCards.getLast();
+        return (discardedCards.size() == 0) ? new EmptyCard(): discardedCards.getLast();
     }
 
     public List<Card> getDiscardeCards() {

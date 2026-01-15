@@ -5,5 +5,11 @@ public enum Sign {
     SKIP,
     WILDCARD,
     WILDCARD_PLUS,
-    NUMBER
+    NUMBER,
+    EMPTY;
+
+
+    public boolean isWildCard() {
+        return this == WILDCARD || this == WILDCARD_PLUS;
+    }
 }

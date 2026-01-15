@@ -4,8 +4,5 @@ package com.goran.uno.game;
     RED,
     BLUE, 
     GREEN, 
-    YELLOW,
-    CHANGE,
-    NO_COLOR,
-
+    YELLOW
 }

@@ -1,5 +1,6 @@
 package com.goran.uno.game;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ComputerPlayer extends Player {
@@ -9,37 +10,33 @@ public class ComputerPlayer extends Player {
     }
 
     public GameMode decideMove() {
-        System.out.println("deciding move");
-        if (getEligibleCards().size() == 0) {
-            if (checkSecondTurn()) return GameMode.PASS;
-            else return GameMode.DRAW;
-        } else return GameMode.MOVE;
+        if (getEligibleCards().isEmpty()) return checkSecondTurn() ? GameMode.PASS : GameMode.DRAW;
+        return GameMode.MOVE;
 
     }
     
     public Card chooseCard() {
-        List<Card> eligibleCards = getEligibleCards();
 
-        Card choosenCard = eligibleCards.stream()
-        .filter(card -> !card.getSign().name().contains("WILDCARD"))
+        Card choosenCard = getEligibleCards().stream()
+        .filter(card -> !card.getSign().isWildCard())
         .findFirst()
-        .orElseGet(() -> eligibleCards.stream()
+        .orElseGet(() -> getEligibleCards().stream()
         .findFirst().orElseThrow(() -> new IllegalStateException("Card not found")));
 
-        if (choosenCard.getSign().name().contains("WILDCARD")) chooseColor(choosenCard);
         System.out.println(choosenCard);
 
         return choosenCard;
 
     }
 
-    public void chooseColor(Card card) {
+    public CardColor chooseColor() {
+
 
         CardColor choosedColor = null;
         long maxCount = 0L;
 
         for (CardColor color: CardColor.values()) {
-            long count = this.getOwnCards().stream().filter(c -> c.getColor() == color).count() ;
+            long count = getOwnCards().stream().filter(c -> c.getColor() == color).count() ;
             System.out.println(color + " " + count);
             if (count >= maxCount) {
                 maxCount = count;
@@ -48,9 +45,8 @@ public class ComputerPlayer extends Player {
         }
 
         System.out.println(choosedColor);
+        return choosedColor;
 
-       ChangeColor changingCard = (ChangeColor) card;
-       changingCard.changeColor(choosedColor);
     }
     
 }

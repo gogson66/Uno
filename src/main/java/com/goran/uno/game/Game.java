@@ -7,6 +7,7 @@ public class Game {
      private final int NUMBER_OF_STARTING_CARDS = 6;
      private Deck deck = new Deck();
      private Player activePlayer;
+     private CardColor activeColor;
      private int activePlayerIndex = 0;
      private Card frontCard;
      private List <Player> players = new ArrayList<>();
@@ -53,6 +54,14 @@ public class Game {
 
      public Player getActivePlayer() {
         return activePlayer;
+     }
+
+     public CardColor getActiveColor() {
+        return activeColor;
+     }
+
+     public void setActiveColor(CardColor activeColor) {
+        this.activeColor = activeColor;
      }
 
     
@@ -125,6 +134,7 @@ public class Game {
         if (activePlayer.getEligibleCards().contains(card)) {
             activePlayer.shedCard(card);
             deck.putOnTable(card);
+            if (!(card instanceof Wildcard)) setActiveColor(card.getColor());
             frontCard = card;
             System.out.println("Front card is: " +  frontCard);
             specialRules = card.getSign();
@@ -143,8 +153,12 @@ public class Game {
             
             switch (mode) {
                 case MOVE -> {
-                    Card choosedCard = computerPlayer.chooseCard();
-                    playCard(choosedCard);
+                    Card choosenCard = computerPlayer.chooseCard();
+                    if (choosenCard instanceof Wildcard) {
+                        CardColor choosenColor = computerPlayer.chooseColor();
+                        setActiveColor(choosenColor);
+                    } 
+                    playCard(choosenCard);
                 }
                 case DRAW -> {
                     pullingCards(1);

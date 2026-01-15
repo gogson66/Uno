@@ -30,7 +30,7 @@
     <artifactId>exec-maven-plugin</artifactId>
     <version>3.1.0</version>
     <configuration>
-    <mainClass>main.java.uno.ui.GameWindow</mainClass>
+    <mainClass>com.goran.uno.ui.GameWindow</mainClass>
      </configuration>
      </plugin>
 

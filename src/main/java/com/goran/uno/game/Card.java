@@ -21,7 +21,6 @@ public class Card {
     }
 
     public Card(Sign sign) {
-        this.color = CardColor.CHANGE;
         this.sign = sign;
         this.imagePath = "/cards/" + this.sign.name().toLowerCase() + ".jpg";
     }
