@@ -18,7 +18,7 @@ public class ComputerPlayer extends Player {
     public Card chooseCard() {
 
         Card choosenCard = getEligibleCards().stream()
-        .filter(card -> !card.getSign().isWildCard())
+        .filter(card -> !(card instanceof Wildcard))
         .findFirst()
         .orElseGet(() -> getEligibleCards().stream()
         .findFirst().orElseThrow(() -> new IllegalStateException("Card not found")));

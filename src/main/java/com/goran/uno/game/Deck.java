@@ -11,16 +11,16 @@ public class Deck {
     public Deck() {
 
         for (CardColor color: colors) {
-            talonCards.add(new Card(color, 0));
+            talonCards.add(new NumberCard(color, 0));
             for (int i = 1; i <= 9; i++ ) {
-                talonCards.add(new Card(color, i));
-                talonCards.add(new Card(color, i));
+                talonCards.add(new NumberCard(color, i));
+                talonCards.add(new NumberCard(color, i));
         }
-            /*for (int i = 0; i < 2; i++) {
-                talonCards.add(new Card(color, Sign.PLUS_TWO ));
-                talonCards.add(new Card(color, Sign.SKIP ));
-                talonCards.add(new Card(color, Sign.REVERSE ));
-        }*/
+            for (int i = 0; i < 2; i++) {
+                talonCards.add(new ActionCard(color, Sign.PLUS_TWO ));
+                talonCards.add(new ActionCard(color, Sign.SKIP ));
+                talonCards.add(new ActionCard(color, Sign.REVERSE ));
+        }
       } 
       for (int i = 0; i < NUMBER_OF_SPECIAL_CARDS; i++) {
         talonCards.add(new Wildcard(Sign.WILDCARD));

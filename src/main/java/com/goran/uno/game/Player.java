@@ -19,14 +19,16 @@ public class Player {
         return isComputer;
     }
 
-    public void setEligibleCards(Card firstDiscardedCard) {
+    public void setEligibleCards(Card firstDiscardedCard, CardColor color) {
         eligibleCards.clear();
         if (firstDiscardedCard instanceof EmptyCard) {
             eligibleCards = new ArrayList<>(this.getOwnCards());
             return;  } 
-        eligibleCards = this.getOwnCards().stream()
-        .filter(card -> (card.getColor().equals(firstDiscardedCard.getColor())) || (card.getNumber() == firstDiscardedCard.getNumber() && card.getSign().equals(firstDiscardedCard.getSign())) || card.getSign().name().contains("WILDCARD"))
+
+        this.getOwnCards().stream()
+        .filter(card -> card.isPlayable(firstDiscardedCard, color))
         .collect(Collectors.toList());
+
     }
 
     public List<Card> getEligibleCards() {

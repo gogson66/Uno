@@ -1,4 +1,5 @@
 /home/Uno/src/main/java/com/goran/uno/game/CardColor.java
+/home/Uno/src/main/java/com/goran/uno/game/ActionCard.java
 /home/Uno/src/main/java/com/goran/uno/game/Game.java
 /home/Uno/src/main/java/com/goran/uno/game/GameMode.java
 /home/Uno/src/main/java/com/goran/uno/game/Deck.java
@@ -10,5 +11,6 @@
 /home/Uno/src/main/java/com/goran/uno/game/Wildcard.java
 /home/Uno/src/main/java/com/goran/uno/game/ChangeColor.java
 /home/Uno/src/main/java/com/goran/uno/ui/CardButton.java
+/home/Uno/src/main/java/com/goran/uno/game/NumberCard.java
 /home/Uno/src/main/java/com/goran/uno/game/Sign.java
 /home/Uno/src/main/java/com/goran/uno/ui/PlayerPanel.java
