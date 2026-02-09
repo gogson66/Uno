@@ -8,8 +8,4 @@ public enum Sign {
     NUMBER,
     EMPTY;
 
-
-    public boolean isWildCard() {
-        return this == WILDCARD || this == WILDCARD_PLUS;
-    }
 }

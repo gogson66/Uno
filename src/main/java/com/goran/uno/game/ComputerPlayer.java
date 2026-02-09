@@ -2,6 +2,8 @@ package com.goran.uno.game;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 public class ComputerPlayer extends Player {
 
@@ -24,7 +26,6 @@ public class ComputerPlayer extends Player {
         .findFirst().orElseThrow(() -> new IllegalStateException("Card not found")));
 
         System.out.println(choosenCard);
-
         return choosenCard;
 
     }
@@ -34,9 +35,10 @@ public class ComputerPlayer extends Player {
 
         CardColor choosedColor = null;
         long maxCount = 0L;
+        List<ColoredCard> coloredCards = getOwnCards().stream().filter(c -> c instanceof ColoredCard).map(c -> (ColoredCard) c).collect(Collectors.toList());
 
         for (CardColor color: CardColor.values()) {
-            long count = getOwnCards().stream().filter(c -> c.getColor() == color).count() ;
+            long count = coloredCards.stream().filter(c -> c.getColor() == color).count() ;
             System.out.println(color + " " + count);
             if (count >= maxCount) {
                 maxCount = count;
@@ -47,6 +49,5 @@ public class ComputerPlayer extends Player {
         System.out.println(choosedColor);
         return choosedColor;
 
-    }
-    
+    }    
 }

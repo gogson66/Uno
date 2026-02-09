@@ -25,7 +25,7 @@ public class Player {
             eligibleCards = new ArrayList<>(this.getOwnCards());
             return;  } 
 
-        this.getOwnCards().stream()
+        eligibleCards = this.getOwnCards().stream()
         .filter(card -> card.isPlayable(firstDiscardedCard, color))
         .collect(Collectors.toList());
 

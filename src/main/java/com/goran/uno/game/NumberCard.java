@@ -10,7 +10,7 @@ public class NumberCard extends Card implements ColoredCard {
     private final CardColor color;
 
     public NumberCard(CardColor color, int number) {
-        super("/cards/" + color.name().toLowerCase() + "_" + number + ".jpg");
+        super("/cards/" + color.name().toLowerCase() + "_" + number + ".jpg", Sign.NUMBER);
         this.color = color;
         this.number = number;
     }

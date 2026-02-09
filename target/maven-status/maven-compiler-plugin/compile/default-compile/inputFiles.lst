@@ -1,5 +1,6 @@
 /home/Uno/src/main/java/com/goran/uno/game/CardColor.java
 /home/Uno/src/main/java/com/goran/uno/game/ActionCard.java
+/home/Uno/src/main/java/com/goran/uno/game/ColoredCard.java
 /home/Uno/src/main/java/com/goran/uno/game/Game.java
 /home/Uno/src/main/java/com/goran/uno/game/GameMode.java
 /home/Uno/src/main/java/com/goran/uno/game/Deck.java

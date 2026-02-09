@@ -7,11 +7,9 @@ import lombok.ToString;
 @ToString
 public class Wildcard extends Card{
     
-    private final Sign sign;
 
     public Wildcard(Sign sign) {
-        super("/cards/\" + this.sign.name().toLowerCase() + \".jpg");
-        this.sign = sign;
+        super("/cards/" + sign.name().toLowerCase() + ".jpg", sign);
     }
 
     @Override

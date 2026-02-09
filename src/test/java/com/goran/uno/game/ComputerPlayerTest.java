@@ -8,37 +8,37 @@ import java.util.List;
 class ComputerPlayerTest {
 
 
-    private ComputerPlayer playerWithCards(Card card, Card frontCard) {
+    private ComputerPlayer playerWithCards(Card card, NumberCard frontCard) {
         ComputerPlayer cp = new ComputerPlayer("player", true);
         cp.setOwnCards(List.of(card));
-        cp.setEligibleCards(frontCard);
+        cp.setEligibleCards(frontCard, frontCard.getColor());
         return cp;
     }
 
     @Test
     void shouldDecidePassIfSecondTurnAndNoEligibleCards() {
-        ComputerPlayer cp = playerWithCards(new Card(CardColor.BLUE, 2), new Card(CardColor.GREEN, 1));
+        ComputerPlayer cp = playerWithCards(new NumberCard(CardColor.BLUE, 2), new NumberCard(CardColor.GREEN, 1));
         cp.setSecondTurn(true);
         assertEquals(GameMode.PASS, cp.decideMove());
     }
 
     @Test
     void shoudDecideMoveIfEligibleCard() {
-        ComputerPlayer cp = playerWithCards(new Card(CardColor.BLUE, 2), new Card(CardColor.BLUE, 1));
+        ComputerPlayer cp = playerWithCards(new NumberCard(CardColor.BLUE, 2), new NumberCard(CardColor.BLUE, 1));
         assertEquals(GameMode.MOVE, cp.decideMove());   
     }
 
     @Test
     void shouldDecideDrawIfNoEligibleCards() {
-        ComputerPlayer cp = playerWithCards(new Card(CardColor.BLUE, 2), new Card(CardColor.GREEN, 1));
+        ComputerPlayer cp = playerWithCards(new NumberCard(CardColor.BLUE, 2), new NumberCard(CardColor.GREEN, 1));
         assertEquals(GameMode.DRAW, cp.decideMove());   
 
     }
 
     @Test
     void shouldChooseCardNumberedCardIfThereIsOne() {
-        Card card = new Card(CardColor.BLUE, 2);
-        ComputerPlayer cp = playerWithCards(card, new Card(CardColor.BLUE, 1));
+        Card card = new NumberCard(CardColor.BLUE, 2);
+        ComputerPlayer cp = playerWithCards(card, new NumberCard(CardColor.BLUE, 1));
         assertEquals(card, cp.chooseCard());
 
     }
@@ -46,7 +46,7 @@ class ComputerPlayerTest {
     @Test
     void shouldChooseWildCardIfNoNumberedCards() {
         Card card = new Wildcard(Sign.WILDCARD);
-        ComputerPlayer cp = playerWithCards(card, new Card(CardColor.BLUE, 1) );
+        ComputerPlayer cp = playerWithCards(card, new NumberCard(CardColor.BLUE, 1) );
         assertEquals(card, cp.chooseCard());
 
     }

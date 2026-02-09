@@ -47,10 +47,6 @@ public class Game {
         else return false;
      } 
 
-     public void setFrontCard(Card card) {
-        this.frontCard = card;
-     }
-
      private void changeActiveColor(Card card) {
         if (card instanceof ColoredCard) {
             ColoredCard c = (ColoredCard) card;
@@ -130,12 +126,12 @@ public class Game {
     }
 
 
-    public void playCard(Card card, CardColor color) {
+    public void playCard(Card card) {
         if (activePlayer.getEligibleCards().contains(card)) {
             activePlayer.shedCard(card);
             deck.putOnTable(card);
             changeActiveColor(card);
-            setFrontCard(card);
+            frontCard = card;
             System.out.println("Front card is: " +  frontCard);
             specialRules = card.getSign();
             if(checkGameOver()) return;
@@ -158,7 +154,7 @@ public class Game {
                         CardColor choosenColor = computerPlayer.chooseColor();
                         setActiveColor(choosenColor);
                     } 
-                    playCard(choosenCard, activeColor);
+                    playCard(choosenCard);
                 }
                 case DRAW -> {
                     pullingCards(1);
